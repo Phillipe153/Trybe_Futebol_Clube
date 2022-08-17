@@ -1,15 +1,35 @@
+
+// import { Request, Response, NextFunction }, express  from 'express';
+
 import * as express from 'express';
+import router from './routes/indexRoutes';
+
+
 
 class App {
   public app: express.Express;
-
+  
   constructor() {
     this.app = express();
+
+    this.app.use(express.json());
+
+    this.app.use('/', router);
 
     this.config();
 
     // Não remover essa rota
-    this.app.get('/', (req, res) => res.json({ ok: true }));
+    this.app.get('/', (_req, res) => res.json({ ok: true }));
+
+    type Error = {
+      status: number,
+      message: string
+    };
+
+    this.app.use((err: Error, _req: express.Request, res: express.Response, _next: express.NextFunction) => {
+      if (err.status) return res.status(err.status).json({ message: err.message });
+      return res.status(500).json({ message: err.message });
+    });
   }
 
   private config():void {
@@ -23,6 +43,8 @@ class App {
     this.app.use(express.json());
     this.app.use(accessControl);
   }
+
+  
 
   public start(PORT: string | number):void {
     this.app.listen(PORT, () => console.log(`Running on port ${PORT}`));
