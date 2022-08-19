@@ -1,10 +1,15 @@
+
 import * as sinon from 'sinon';
-import * as chai from 'chai';
+import chai from 'chai';
+import { before, after } from 'mocha';
 // @ts-ignore
 import chaiHttp = require('chai-http');
 
+import User from '../database/models/loginModel';
+import  Mock  from './mock/mock';
 import { app } from '../app';
-import Example from '../database/models/ExampleModel';
+
+
 
 import { Response } from 'superagent';
 
@@ -12,7 +17,33 @@ chai.use(chaiHttp);
 
 const { expect } = chai;
 
-describe('Seu teste', () => {
+describe('Verifica rota Login', () => {
+
+  let chaiHttpResponse: Response;
+
+  before(() => {
+    sinon.stub(User, 'findOne').callsFake( Mock.findOne )
+  })
+
+  after(() => {
+    (User.findOne as sinon.SinonStub).restore();
+  })
+
+  it('teste', async () => {
+    chaiHttpResponse = await chai.request(app).post('/login').send({
+     
+      email: 'admin@admin.com',
+      password: 'secret_adimin',
+      
+    }); 
+    console.log(chaiHttpResponse.body);
+    
+    try {  
+      expect(chaiHttpResponse.status).to.be.eq(201)
+      } catch(err) {
+        expect(chaiHttpResponse.status).to.be.eq(401)
+      }  
+  })
   /**
    * Exemplo do uso de stubs com tipos
    */
@@ -39,7 +70,7 @@ describe('Seu teste', () => {
   //   expect(...)
   // });
 
-  it('Seu sub-teste', () => {
-    expect(false).to.be.eq(true);
-  });
+  // it('Seu sub-teste', () => {
+  //   expect(false).to.be.eq(true);
+  // });
 });

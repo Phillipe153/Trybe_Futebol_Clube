@@ -1,7 +1,7 @@
 
 // import { Request, Response, NextFunction }, express  from 'express';
 
-import * as express from 'express';
+import express from 'express';
 import router from './routes/indexRoutes';
 
 

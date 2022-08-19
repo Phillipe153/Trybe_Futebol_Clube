@@ -1,6 +1,6 @@
 import { Request, Response, NextFunction } from 'express';
 import * as Joi from 'joi';
-import  errorMessage  from '../utils/error'
+import  erroHandler  from '../utils/error'
 
 const regexEmail = /^\w+([.-]?\w+)*@\w+([.-]?\w+)*(\.\w{2,3})+$/;
 
@@ -14,7 +14,7 @@ const loginValidateMidlleware = (req: Request, _res: Response, next: NextFunctio
     const { error  } = userData.validate({email, password});
 
     if(error) {
-        return next(errorMessage(401, error.message))
+        return next(new erroHandler(401, error.message))
     } next();
 }
 
