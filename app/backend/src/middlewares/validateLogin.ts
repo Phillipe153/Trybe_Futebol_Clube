@@ -12,9 +12,9 @@ const userData = Joi.object({
 const loginValidateMidlleware = (req: Request, _res: Response, next: NextFunction) =>  {
     const { email, password } = req.body;
     const { error  } = userData.validate({email, password});
-
+    
     if(error) {
-        return next(new erroHandler(401, error.message))
+        return next(new erroHandler(401, 'All fields must be filled'))
     } next();
 }
 

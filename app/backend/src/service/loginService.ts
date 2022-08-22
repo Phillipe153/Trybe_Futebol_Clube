@@ -5,21 +5,29 @@ import  User  from '../database/models/loginModel'
 import { Attributes } from '../interfaces';
 import bcrypt from 'bcryptjs';
 
-export default async function loginService(email: string, password: string):
+export default async function loginService(email: string, pass: string):
 Promise<{status: number, token?: string, message?: string}> {  
     
-    const user = await User.findOne({where: {email}})
+    const user: User | null = await User.findOne({where: {email}})
+    // console.log(user?.password);
     
-    const pass = user?.getDataValue("password");    
     
-    const compare = await bcrypt.compare(password, JSON.stringify(pass) );
-    console.log("compare: ", compare);
+    const password = user?.password || ''; 
+    console.log("user: ", user);
+    
+    
+    console.log("pass: ", pass);
+    console.log("password: ", password);
+    // console.log("email: ", email);
+    
+    const compare = await bcrypt.compare(pass,  password );
+    console.log('compare', compare);
 
     if(!user) {
         throw new erroHandler(401, 'Incorrect email or password')
     }
     if(compare === false) {
-        throw new erroHandler(401, 'Incorrect password')
+        throw new erroHandler(401, 'Incorrect email or password')
     }
     const token = generateJWT(user as unknown as Attributes);
     return{status:200, token}

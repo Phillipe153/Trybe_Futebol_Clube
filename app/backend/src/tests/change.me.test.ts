@@ -1,76 +1,96 @@
+// @ts-ignore
 
 import * as sinon from 'sinon';
 import chai from 'chai';
 import { before, after } from 'mocha';
-// @ts-ignore
-import chaiHttp = require('chai-http');
+import chaiHttp from 'chai-http';
 
 import User from '../database/models/loginModel';
-import  Mock  from './mock/mock';
+import  Mock, {mockFindOne} from './mock/mock';
 import { app } from '../app';
 
 
 
 import { Response } from 'superagent';
+import { Model } from 'sequelize/types';
 
 chai.use(chaiHttp);
 
 const { expect } = chai;
 
 describe('Verifica rota Login', () => {
+  const mockFindOne: unknown = {
+    id: 1,
+    username: "Admin",
+    email: "admin@admin.com",
+    password: "$2a$08$xi.Hxk1czAO0nZR..B393u10aED0RQ1N3PAEXQ7HxtLjKPEZBu.PW",
+    role: "admin"
+  };
 
   let chaiHttpResponse: Response;
 
   before(() => {
-    sinon.stub(User, 'findOne').callsFake( Mock.findOne )
+    sinon
+    .stub(User, 'findOne').resolves(mockFindOne as Model)
   })
+  after(() => (User.findOne as sinon.SinonStub).restore())
 
-  after(() => {
-    (User.findOne as sinon.SinonStub).restore();
-  })
-
-  it('teste', async () => {
+  it('Verifica se retorna um token ao digitar dados validos', async () => {
     chaiHttpResponse = await chai.request(app).post('/login').send({
-     
       email: 'admin@admin.com',
-      password: 'secret_adimin',
+      password: 'secret_admin',
       
     }); 
     console.log(chaiHttpResponse.body);
     
-    try {  
-      expect(chaiHttpResponse.status).to.be.eq(201)
-      } catch(err) {
-        expect(chaiHttpResponse.status).to.be.eq(401)
-      }  
+    expect(chaiHttpResponse.status).to.be.eq(200);
+    expect(chaiHttpResponse.body).to.have.property('token')
+
+  });
+  it('verica se retorna um status 401 e uma mensagm de erro em uma requisiçao sem email', async () => {
+    chaiHttpResponse = await chai.request(app).post('/login').send({
+      password: 'sercret_admin',
+    });
+    
+    expect(chaiHttpResponse.status).to.be.eq(401);
+    expect(chaiHttpResponse.body.message).to.be.eq('All fields must be filled');
+
+  });
+  it('verica se retorna um status 401 e uma mensagm de erro em uma requisiçao sem password', async () => {
+    chaiHttpResponse = await chai.request(app).post('/login').send({
+      email: 'admin@admin.com',
+    });
+    expect(chaiHttpResponse.status).to.be.eq(401)
+    expect(chaiHttpResponse.body.message).to.be.eq('All fields must be filled');
+
+  });
+ 
+  it('verica se retorna um status 401 e uma mensagm de erro em uma requisiçao com password incorreto', async () => {
+    chaiHttpResponse = await chai.request(app).post('/login').send({
+      email: 'admin@admin.com',
+      password: 'sec_admin',    });
+    expect(chaiHttpResponse.status).to.be.eq(401)
+    expect(chaiHttpResponse.body.message).to.be.eq('Incorrect email or password');
+
+  });
+  
+});
+describe('Verifica rota Login com email incorreto', () => {
+
+  let chaiHttpResponse: Response;
+
+  before(() => {
+    sinon
+    .stub(User, 'findOne').resolves(null)
   })
-  /**
-   * Exemplo do uso de stubs com tipos
-   */
+  after(() => (User.findOne as sinon.SinonStub).restore())
 
-  // let chaiHttpResponse: Response;
+  it('verica se retorna um status 401 e uma mensagm de erro em uma requisiçao com email incorreto', async () => {
+    chaiHttpResponse = await chai.request(app).post('/login').send({
+      email: 'Ad@admin.com',
+      password: 'secret_admin',    });
+    expect(chaiHttpResponse.status).to.be.eq(401)
+    expect(chaiHttpResponse.body.message).to.be.eq('Incorrect email or password');
 
-  // before(async () => {
-  //   sinon
-  //     .stub(Example, "findOne")
-  //     .resolves({
-  //       ...<Seu mock>
-  //     } as Example);
-  // });
-
-  // after(()=>{
-  //   (Example.findOne as sinon.SinonStub).restore();
-  // })
-
-  // it('...', async () => {
-  //   chaiHttpResponse = await chai
-  //      .request(app)
-  //      ...
-
-  //   expect(...)
-  // });
-
-  // it('Seu sub-teste', () => {
-  //   expect(false).to.be.eq(true);
-  // });
+});
 });
