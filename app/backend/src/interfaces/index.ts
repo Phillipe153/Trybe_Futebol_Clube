@@ -25,3 +25,15 @@ export interface IData{
   
 }
 
+export interface ITeam {
+  teams: {
+    dataValues:{
+      id: number,
+      team_name: string
+
+    }
+  }
+
+  
+}
+

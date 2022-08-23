@@ -94,3 +94,50 @@ describe('Verifica rota Login com email incorreto', () => {
 
 });
 });
+describe('Verifica rota /teams', () => {
+
+  let chaiHttpResponse: Response;
+
+  const allTeams = [
+    {
+      "id": 1,
+      "teamName": "Avaí/Kindermann"
+    },
+    {
+      "id": 2,
+      "teamName": "Bahia"
+    },
+    {
+      "id": 3,
+      "teamName": "Botafogo"
+    },
+    {
+      "id": 4,
+      "teamName": "São Paulo"
+    },
+    {
+      "id": 5,
+      "teamName": "Cruzeiro"
+    }
+  ]
+
+  before(() => {
+    sinon
+    .stub(User, 'findAll').resolves(allTeams as any)
+  })
+  after(() => (User.findAll as sinon.SinonStub).restore())
+
+  it('verica se retorna um status 401 e uma mensagm de erro em uma requisiçao com email incorreto', async () => {
+    chaiHttpResponse = await chai.request(app).get('/teams')
+    console.log(chaiHttpResponse.body)
+    expect(chaiHttpResponse.status).to.be.eq(200)
+    expect(chaiHttpResponse.body).to.be.length(16);
+
+});
+// it('verica se retorna um status 401 e uma mensagm de erro em uma requisiçao com email incorreto', async () => {
+//   chaiHttpResponse = await chai.request(app).get('/teams/5')
+//   expect(chaiHttpResponse.status).to.be.eq(200)
+//   expect(chaiHttpResponse.body.teamName).to.be.eq('Cruzeiro');
+
+// });
+});

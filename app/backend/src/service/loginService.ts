@@ -7,15 +7,7 @@ import { Attributes } from '../interfaces';
 export default async function loginService(email: string, pass: string):
 Promise<{ status: number, token?: string, message?: string }> {
   const user= await User.findOne({ where: { email } });
-  // console.log(user?.password);
-
-  // const { username, role} = user.dataValues;
   const password = user?.password || '';
-  // console.log('user: ', user.dataValues);
-
-  // console.log('pass: ', pass);
-  // console.log('password: ', password);
-  // console.log("email: ", email);
 
   const compare = await bcrypt.compare(pass, password);
   console.log('compare', compare);
