@@ -12,7 +12,9 @@ const jwtConfig: jwt.SignOptions = {
 const secret = <string> (process.env.JWT_SECRET);
 
 const generateJWT = (payload: Attributes) => {
-    const token = jwt.sign({data: payload}, secret, jwtConfig);
+    // console.log('payload', payload);
+    
+    const token = jwt.sign({payload}, secret, jwtConfig);
     return token;
 }
 

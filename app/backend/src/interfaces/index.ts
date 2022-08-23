@@ -9,3 +9,19 @@ export interface Attributes extends IUser {
   role: string
 }
 
+export interface IData{
+ 
+    payload: {
+      id: number,
+      username: string,
+      role: string,
+      email: string,
+      password?: string,
+      
+    },
+    iat: 1661274557,
+    exp: 1661360957
+  
+  
+}
+

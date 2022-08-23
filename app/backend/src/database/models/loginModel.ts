@@ -1,9 +1,8 @@
-import * as sequelize from 'sequelize';
-import { Attributes } from '../../interfaces/index';
+import {Model, INTEGER, STRING } from 'sequelize';
 import 'dotenv/config';
 import db from '.';
 
-class User extends sequelize.Model<Attributes> {
+class User extends Model {
   id!: number;
   username!: string;
   role!: string;
@@ -13,14 +12,14 @@ class User extends sequelize.Model<Attributes> {
 
 User.init({
   id: {
-    type: sequelize.DataTypes.INTEGER,
+    type: INTEGER,
     primaryKey: true,
     autoIncrement: true,
   },
-  username: sequelize.DataTypes.STRING,
-  email: sequelize.DataTypes.STRING,
-  password: sequelize.DataTypes.STRING,
-  role: sequelize.DataTypes.STRING,
+  username: STRING,
+  email: STRING,
+  password: STRING,
+  role: STRING,
 }, {
   timestamps: false,
   modelName: 'users',
