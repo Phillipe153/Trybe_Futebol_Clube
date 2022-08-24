@@ -8,7 +8,6 @@ export default async function teamService(id: number):Promise<any> {
     id: teamSearched.id ,
     teamName: teamSearched.team_name
   }
-  console.log('team: ', team);
 
   return {status: 200, team};
 }

@@ -15,7 +15,6 @@ export default async function allTeamsService():Promise<any> {
       teamName: e.team_name
     }))as unknown as ITeams;
     
-    console.log(allTeams);
     
   return {status: 200, allTeams};
 }

@@ -13,6 +13,7 @@ import { app } from '../app';
 
 import { Response } from 'superagent';
 import { Model } from 'sequelize/types';
+import Team from '../database/models/teams';
 
 chai.use(chaiHttp);
 
@@ -99,45 +100,125 @@ describe('Verifica rota /teams', () => {
 
   const allTeams = [
     {
-      "id": 1,
-      "teamName": "Avaí/Kindermann"
+      id: 1,
+      team_name: "Avaí/Kindermann"
     },
     {
-      "id": 2,
-      "teamName": "Bahia"
+      id: 2,
+      team_name: "Bahia"
     },
     {
-      "id": 3,
-      "teamName": "Botafogo"
+      id: 3,
+      team_name: "Botafogo"
     },
     {
-      "id": 4,
-      "teamName": "São Paulo"
+      id: 4,
+      team_name: "São Paulo"
     },
     {
-      "id": 5,
-      "teamName": "Cruzeiro"
+      id: 5,
+      team_name: "Cruzeiro"
     }
   ]
 
   before(() => {
     sinon
-    .stub(User, 'findAll').resolves(allTeams as any)
+    .stub(Team, 'findAll').resolves(allTeams as any)
   })
-  after(() => (User.findAll as sinon.SinonStub).restore())
+  after(() => (Team.findAll as sinon.SinonStub).restore())
 
-  it('verica se retorna um status 200 e uma lista com 16 times', async () => {
+  it('verica se retorna um status 200 e uma lista com 5 times', async () => {
     chaiHttpResponse = await chai.request(app).get('/teams')
     expect(chaiHttpResponse.status).to.be.eq(200)
-    expect(chaiHttpResponse.body).to.be.length(16);
+    expect(chaiHttpResponse.body).to.be.length(5);
 
 });
-it('verica se retorna um status 200 e um array com id igua e 5 e team_name igual a Cruzeiro', async () => {
+});
+describe('Verifica rota /teams/:id', () => {
+
+  let chaiHttpResponse: Response;
+
+  const team = {
+      team_name: "Cruzeiro",
+      id: 5,
+    };
+  
+
+  before(() => {
+    sinon
+    .stub(Team, 'findOne').resolves(team as any)
+  })
+  after(() => (Team.findOne as sinon.SinonStub).restore())
+
+ 
+it('verica se retorna um status 200 e um array com id igua e 5 e teamName igual a Cruzeiro', async () => {
   chaiHttpResponse = await chai.request(app).get('/teams/5')
   
   expect(chaiHttpResponse.status).to.be.eq(200);
   expect(chaiHttpResponse.body.id).to.be.eq(5);
   expect(chaiHttpResponse.body.teamName).to.be.eq('Cruzeiro');
 
+});
+});
+describe('Verifica rota /matches', () => {
+
+  let chaiHttpResponse: Response;
+
+  const matches = [
+    {
+      "id": 1,
+      "homeTeam": 16,
+      "homeTeamGoals": 1,
+      "awayTeam": 8,
+      "awayTeamGoals": 1,
+      "inProgress": false,
+      "teamHome": {
+        "teamName": "São Paulo"
+      },
+      "teamAway": {
+        "teamName": "Grêmio"
+      }
+    },
+    {
+      "id": 41,
+      "homeTeam": 16,
+      "homeTeamGoals": 2,
+      "awayTeam": 9,
+      "awayTeamGoals": 0,
+      "inProgress": true,
+      "teamHome": {
+        "teamName": "São Paulo"
+      },
+      "teamAway": {
+        "teamName": "Internacional"
+      }
+    },
+    {
+      "id": 42,
+      "homeTeam": 6,
+      "homeTeamGoals": 1,
+      "awayTeam": 1,
+      "awayTeamGoals": 0,
+      "inProgress": true,
+      "teamHome": {
+        "teamName": "Ferroviária"
+      },
+      "teamAway": {
+        "teamName": "Avaí/Kindermann"
+      }
+    }
+  ]
+  before(() => {
+    sinon
+    .stub(Math, 'findAll').resolves(matches)
+  })
+  after(() => (Math.findAll as sinon.SinonStub).restore())
+
+  it('verica se retorna um status 200 e uma lista com 3 partidas', async () => {
+    chaiHttpResponse = await chai.request(app).get('/matches');
+    expect(chaiHttpResponse.status).to.be.eq(200)
+    expect(chaiHttpResponse.body).to.be.length(3);
+    expect(chaiHttpResponse.body[0]).to.have.property('teamHome');
+    expect(chaiHttpResponse.body[0]).to.have.property('teamAway')
 });
 });

@@ -26,4 +26,5 @@ User.init({
   sequelize: db,
 });
 
+
 export default User;
