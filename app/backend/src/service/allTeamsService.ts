@@ -10,7 +10,12 @@ import User from '../database/models/loginModel';
    
 export default async function allTeamsService():Promise<any> {
 
-    const allTeams: ITeams  | null = await Team.findAll() as unknown as ITeams;
+    const allTeams: ITeams  | null = (await Team.findAll()).map((e) => ({
+      id: e.id,
+      teamName: e.team_name
+    }))as unknown as ITeams;
+    
+    console.log(allTeams);
     
   return {status: 200, allTeams};
 }

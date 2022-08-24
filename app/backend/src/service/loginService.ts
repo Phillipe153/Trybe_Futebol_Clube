@@ -10,7 +10,6 @@ Promise<{ status: number, token?: string, message?: string }> {
   const password = user?.password || '';
 
   const compare = await bcrypt.compare(pass, password);
-  console.log('compare', compare);
 
   if (!user) {
     throw new ErroHandler(401, 'Incorrect email or password');

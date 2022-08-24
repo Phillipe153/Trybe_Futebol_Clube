@@ -41,26 +41,25 @@ describe('Verifica rota Login', () => {
       password: 'secret_admin',
       
     }); 
-    console.log(chaiHttpResponse.body);
     
     expect(chaiHttpResponse.status).to.be.eq(200);
     expect(chaiHttpResponse.body).to.have.property('token')
 
   });
-  it('verica se retorna um status 401 e uma mensagm de erro em uma requisiçao sem email', async () => {
+  it('verica se retorna um status 400 e uma mensagm de erro em uma requisiçao sem email', async () => {
     chaiHttpResponse = await chai.request(app).post('/login').send({
       password: 'sercret_admin',
     });
     
-    expect(chaiHttpResponse.status).to.be.eq(401);
+    expect(chaiHttpResponse.status).to.be.eq(400);
     expect(chaiHttpResponse.body.message).to.be.eq('All fields must be filled');
 
   });
-  it('verica se retorna um status 401 e uma mensagm de erro em uma requisiçao sem password', async () => {
+  it('verica se retorna um status 400 e uma mensagm de erro em uma requisiçao sem password', async () => {
     chaiHttpResponse = await chai.request(app).post('/login').send({
       email: 'admin@admin.com',
     });
-    expect(chaiHttpResponse.status).to.be.eq(401)
+    expect(chaiHttpResponse.status).to.be.eq(400)
     expect(chaiHttpResponse.body.message).to.be.eq('All fields must be filled');
 
   });
@@ -127,17 +126,18 @@ describe('Verifica rota /teams', () => {
   })
   after(() => (User.findAll as sinon.SinonStub).restore())
 
-  it('verica se retorna um status 401 e uma mensagm de erro em uma requisiçao com email incorreto', async () => {
+  it('verica se retorna um status 200 e uma lista com 16 times', async () => {
     chaiHttpResponse = await chai.request(app).get('/teams')
-    console.log(chaiHttpResponse.body)
     expect(chaiHttpResponse.status).to.be.eq(200)
     expect(chaiHttpResponse.body).to.be.length(16);
 
 });
-// it('verica se retorna um status 401 e uma mensagm de erro em uma requisiçao com email incorreto', async () => {
-//   chaiHttpResponse = await chai.request(app).get('/teams/5')
-//   expect(chaiHttpResponse.status).to.be.eq(200)
-//   expect(chaiHttpResponse.body.teamName).to.be.eq('Cruzeiro');
+it('verica se retorna um status 200 e um array com id igua e 5 e team_name igual a Cruzeiro', async () => {
+  chaiHttpResponse = await chai.request(app).get('/teams/5')
+  
+  expect(chaiHttpResponse.status).to.be.eq(200);
+  expect(chaiHttpResponse.body.id).to.be.eq(5);
+  expect(chaiHttpResponse.body.teamName).to.be.eq('Cruzeiro');
 
-// });
+});
 });

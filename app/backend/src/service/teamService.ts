@@ -2,9 +2,13 @@ import { ITeam } from '../interfaces';
 import Team from '../database/models/teams';
 
 export default async function teamService(id: number):Promise<any> {
-    console.log('entrou em service');
     
-  const team: ITeam | null = await Team.findOne({ where:  {id}}) as unknown as ITeam;
-//   console.log('team: ', team.team.dataValues);
+  const teamSearched: ITeam= await Team.findOne({ where:  {id}}) as ITeam;
+  const team = {
+    id: teamSearched.id ,
+    teamName: teamSearched.team_name
+  }
+  console.log('team: ', team);
+
   return {status: 200, team};
 }

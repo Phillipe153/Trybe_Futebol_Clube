@@ -35,12 +35,7 @@ export interface ITeams {
 }
 
 export interface ITeam {
-  team: {
-    dataValues:{
       id: number,
       team_name: string
-
-    }
-  }
 }
 

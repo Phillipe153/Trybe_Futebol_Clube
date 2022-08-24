@@ -5,7 +5,6 @@ export default async function teamController(req: Request, res: Response, next: 
     try {
     
         const {id} = req.params;
-        console.log('path: ',id);
         
         const {status, team} = await teamService(+id)
         return res.status(status).json(team);
