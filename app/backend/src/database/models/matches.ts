@@ -47,11 +47,11 @@ Matches.init(
 );
 
 Matches.belongsTo(Team, {
-  as: 'homeTeam',
+  as: 'home',
   foreignKey: 'homeTeam',
 });
 Matches.belongsTo(Team, {
-  as: 'awayTeam',
+  as: 'away',
   foreignKey: 'awayTeam',
 });
 

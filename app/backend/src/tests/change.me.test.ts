@@ -14,6 +14,7 @@ import { app } from '../app';
 import { Response } from 'superagent';
 import { Model } from 'sequelize/types';
 import Team from '../database/models/teams';
+import Match from '../database/models/matches';
 
 chai.use(chaiHttp);
 
@@ -210,9 +211,9 @@ describe('Verifica rota /matches', () => {
   ]
   before(() => {
     sinon
-    .stub(Math, 'findAll').resolves(matches)
+    .stub(Match, 'findAll').resolves(matches as any)
   })
-  after(() => (Math.findAll as sinon.SinonStub).restore())
+  after(() => (Match.findAll as sinon.SinonStub).restore())
 
   it('verica se retorna um status 200 e uma lista com 3 partidas', async () => {
     chaiHttpResponse = await chai.request(app).get('/matches');
