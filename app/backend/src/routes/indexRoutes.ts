@@ -5,6 +5,8 @@ import loginValidateMidlleware from '../middlewares/validateLogin';
 import allTeamsController from '../controller/allTeamsController';
 import teamController from '../controller/teamController';
 import matchesController from '../controller/marchesController';
+import matchesControllerSearch from '../controller/matchesControllerSearch';
+import newMatchController from '../controller/newMatchController';
 
 const router = Router();
 
@@ -14,5 +16,8 @@ router.get('/login/validate', loginValidateController);
 router.get('/teams/:id', teamController);
 router.get('/teams', allTeamsController);
 
+router.get('/matches/search', matchesControllerSearch);
 router.get('/matches', matchesController);
+router.post('/matches', newMatchController);
+router.put('/matches/:id', updatedMatch);
 export default router;

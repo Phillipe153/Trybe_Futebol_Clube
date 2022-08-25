@@ -19,7 +19,6 @@ export default async function matchesService():Promise<{ status: number, allMatc
     },
     ],
   }) as unknown as IMatches;
-  console.log(allMatches);
 
   return { status: 200, allMatches };
 }
