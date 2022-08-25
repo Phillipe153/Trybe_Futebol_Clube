@@ -9,7 +9,7 @@ class Matches extends Model {
   homeTeamGoals!: number;
   awayTeam!: number;
   awayTeamGoals!: number;
-  inProgress!: boolean;
+  inProgress!: boolean | number;
 }
 
 Matches.init(
@@ -36,8 +36,10 @@ Matches.init(
       type: INTEGER,
       field: 'away_team_goals',
     },
-    inProgress: BOOLEAN,
-    field: 'in_progress',
+    inProgress: {
+      type: BOOLEAN,
+      field: 'in_progress',
+    },
   },
   {
     timestamps: false,
@@ -47,11 +49,11 @@ Matches.init(
 );
 
 Matches.belongsTo(Team, {
-  as: 'home',
+  as: 'teamHome',
   foreignKey: 'homeTeam',
 });
 Matches.belongsTo(Team, {
-  as: 'away',
+  as: 'teamAway',
   foreignKey: 'awayTeam',
 });
 

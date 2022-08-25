@@ -1,25 +1,29 @@
-'use strict';
-import {Model, INTEGER, STRING } from 'sequelize';
+import { Model, INTEGER, STRING } from 'sequelize';
 import 'dotenv/config';
 import db from '.';
 
 class Team extends Model {
   id!: number;
-  team_name!: string
+  teamName!: string;
 }
 
-Team.init({
-  id: {
-    type: INTEGER,
-    primaryKey: true,
-    autoIncrement: true,
-  },
-  team_name: STRING
+Team.init(
+  {
+    id: {
+      type: INTEGER,
+      primaryKey: true,
+      autoIncrement: true,
+    },
+    teamName: {
+      type: STRING,
+      field: 'team_name',
+    },
   },
   {
-  timestamps: false,
-  modelName: 'teams',
-  sequelize: db,
-});
+    timestamps: false,
+    modelName: 'teams',
+    sequelize: db,
+  },
+);
 
 export default Team;
