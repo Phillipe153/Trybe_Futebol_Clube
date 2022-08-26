@@ -7,6 +7,7 @@ import teamController from '../controller/teamController';
 import matchesController from '../controller/marchesController';
 import matchesControllerSearch from '../controller/matchesControllerSearch';
 import newMatchController from '../controller/newMatchController';
+import updatedMatchController from '../controller/updateMatchController';
 
 const router = Router();
 
@@ -19,5 +20,5 @@ router.get('/teams', allTeamsController);
 router.get('/matches/search', matchesControllerSearch);
 router.get('/matches', matchesController);
 router.post('/matches', newMatchController);
-router.put('/matches/:id', updatedMatch);
+router.put('/matches/:id', updatedMatchController);
 export default router;
