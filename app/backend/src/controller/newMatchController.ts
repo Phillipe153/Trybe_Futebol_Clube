@@ -1,14 +1,16 @@
 import { Request, Response, NextFunction } from 'express';
 import newMatchService from '../service/newMatchSerrvice';
-import ErroHandler from '../utils/error';
+// import ErroHandler from '../utils/error';
+import authToken from '../utils/authToken';
 
 async function newMatchController(req: Request, res: Response, next: NextFunction) {
   try {
     const token = req.headers.authorization;
+    authToken(token as string);
 
-    if (!token) {
-      throw new ErroHandler(401, 'Token not found');
-    }
+    // if (!auth) {
+    //   throw new ErroHandler(401, 'Token not found');
+    // }
 
     const { homeTeam, awayTeam, homeTeamGoals, awayTeamGoals } = req.body;
 

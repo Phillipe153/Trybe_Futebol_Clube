@@ -8,6 +8,7 @@ import matchesController from '../controller/marchesController';
 import matchesControllerSearch from '../controller/matchesControllerSearch';
 import newMatchController from '../controller/newMatchController';
 import updatedMatchController from '../controller/updateMatchController';
+import ValidateTeamsMidlleware from '../middlewares/validateTeams';
 
 const router = Router();
 
@@ -17,8 +18,8 @@ router.get('/login/validate', loginValidateController);
 router.get('/teams/:id', teamController);
 router.get('/teams', allTeamsController);
 
+router.patch('/matches/:id/finish', updatedMatchController);
 router.get('/matches/search', matchesControllerSearch);
 router.get('/matches', matchesController);
-router.post('/matches', newMatchController);
-router.put('/matches/:id', updatedMatchController);
+router.post('/matches', ValidateTeamsMidlleware, newMatchController);
 export default router;

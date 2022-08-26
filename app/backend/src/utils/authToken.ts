@@ -1,31 +1,21 @@
-import jwt, { JwtPayload } from 'jsonwebtoken';
-import { Request, Response, NextFunction } from 'express';
+import jwt from 'jsonwebtoken';
 
 import dotenv from 'dotenv';
 import ErroHandler from './error';
-import { Attributes, IData } from '../interfaces';
+import { IData } from '../interfaces';
 
 dotenv.config();
 
 const authToken = (token: string) => {
-  
+  let dec: IData = {} as IData;
+  jwt.verify(token, process.env.JWT_SECRET as string, (err, decoded) => {
+    if (err) {
+      throw new ErroHandler(401, 'Token must be a valid token');
+    }
+    dec = decoded as IData;
+  });
 
-    // const dec = jwt.verify(token, process.env.JWT_SECRET as string) as IData;
-    // if (!dec) {
-    //     throw new ErroHandler(400, 'deu ruim aqui')
-    // }
-    let dec: IData = {} as IData;
-    jwt.verify(token, process.env.JWT_SECRET as string, (err, decoded)=> {
-              if (err) {
-                throw new ErroHandler(401, 'Expired or invalid token');
-              }            
-              dec = decoded as IData;
-            });
-            console.log('dec: ',dec);
-            
-    return dec;
-        
-    
-}
+  return dec;
+};
 
 export default authToken;
