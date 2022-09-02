@@ -1,3 +1,4 @@
+/* eslint-disable sonarjs/cognitive-complexity */
 /* eslint-disable max-lines-per-function */
 
 import { Request, Response, NextFunction } from 'express';
@@ -40,8 +41,6 @@ Promise<void> {
         goalsPro += match.awayTeamGoals;
         goalsContra += match.homeTeamGoals;
         jogos += 1;
-        // SaldoDeGols = goalsPro - goalsContra;
-        // aproveitamento = (pontos / (jogos * 3)) * 100;
       }
       if (team.id === match.homeTeam) {
         if (match.homeTeamGoals > match.awayTeamGoals) {
