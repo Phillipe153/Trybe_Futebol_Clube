@@ -7,8 +7,8 @@ async function matchesControllerSearch(req: Request, res: Response, next: NextFu
     const q = query.inProgress === 'true';
     console.log('query: ', q);
 
-    const { status, allMatches } = await matchesServiceSearched(q);
-    return res.status(status).json(allMatches);
+    const allMatches = await matchesServiceSearched(q);
+    return res.status(200).json(allMatches);
   } catch (err) {
     next(err);
   }

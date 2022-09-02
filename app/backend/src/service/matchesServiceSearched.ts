@@ -1,13 +1,11 @@
 import { Op } from 'sequelize';
-import { IMatches } from '../interfaces';
+import { IMatchesWithsForeach } from '../interfaces';
 import Matches from '../database/models/matches';
 import Team from '../database/models/teams';
 
 async function matchesServiceSearched(q: boolean)
-  :Promise<{ status: number, allMatches: IMatches }> {
-  console.log('q: ', typeof q);
-
-  const allMatches: IMatches = await Matches.findAll({ where:
+  :Promise< IMatchesWithsForeach > {
+  const allMatches: IMatchesWithsForeach = await Matches.findAll({ where:
     { inProgress: { [Op.is]: q } as any },
   include: [{
     model: Team,
@@ -21,7 +19,7 @@ async function matchesServiceSearched(q: boolean)
     attributes: {
       exclude: ['id'],
     } }],
-  }) as unknown as IMatches;
-  return { status: 200, allMatches };
+  }) as unknown as IMatchesWithsForeach;
+  return allMatches;
 }
 export default matchesServiceSearched;

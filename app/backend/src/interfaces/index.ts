@@ -52,3 +52,25 @@ export interface IMatches {
   }[]
 
 }
+
+export interface IMatchesWithsForeach extends IMatches {
+  reduce(arg0:
+  (acc: number, curr: IMatches) => Promise<number | undefined>, valueInitial: number):
+  Promise<number>,
+  forEach(arg0: (match: IMatches, index: number) => Promise<void>): any,
+
+}
+
+export interface IClassification {
+  id?: number;
+  name: string,
+  totalPoints: number,
+  totalGames: number,
+  totalVictories: number,
+  totalDraws: number,
+  totalLosses: number,
+  goalsFavor: number,
+  goalsOwn: number,
+  goalsBalance: number,
+  efficiency: number
+}
