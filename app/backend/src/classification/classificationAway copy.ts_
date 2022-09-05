@@ -1,17 +1,15 @@
 /* eslint-disable max-lines-per-function */
 
-// import { Request, Response, NextFunction } from 'express';
+import { Request, Response, NextFunction } from 'express';
 
 import { IClassification, IMatchesWithsForeach } from '../interfaces';
 import matchesServiceSearched from '../service/matchesServiceSearched';
 import ClassificationAway from '../database/models/classificationAway';
 
-async function classificationAway():
-Promise<IClassification> {
+async function classificationAway(_req: Request, _res: Response, next: NextFunction):
+Promise<void> {
   const allMatches: IMatchesWithsForeach = await matchesServiceSearched(false);
   const teamClassification: IClassification[] = (await ClassificationAway.findAll());
-
-  const classificationHomeTable: IClassification[] = [];
 
   teamClassification.forEach(async (team) => {
     let pontos = 0;
@@ -47,31 +45,22 @@ Promise<IClassification> {
       }
     });
 
-    classificationHomeTable.push({
-      id: team.id as number,
-      name: team.name as string,
-      totalPoints: pontos,
-      totalGames: jogos,
-      totalVictories: vitorias,
-      totalDraws: empate,
-      totalLosses: derrotas,
-      goalsFavor: goalsPro,
-      goalsOwn: goalsContra,
-      goalsBalance: SaldoDeGols,
-      efficiency: aproveitamento.toFixed(2) as unknown as number,
-
-    });
+    await ClassificationAway.update(
+      {
+        totalPoints: pontos,
+        totalGames: jogos,
+        totalVictories: vitorias,
+        totalDraws: empate,
+        totalLosses: derrotas,
+        goalsFavor: goalsPro,
+        goalsOwn: goalsContra,
+        goalsBalance: SaldoDeGols,
+        efficiency: aproveitamento.toFixed(2),
+      },
+      { where: { id: team.id } },
+    ) as unknown as IClassification;
   });
-
-  classificationHomeTable.sort((a, b) =>
-    (b.totalPoints - a.totalPoints
-      || b.totalVictories - a.totalVictories
-      || b.goalsBalance - a.goalsBalance
-      || b.goalsFavor - a.goalsFavor
-      || b.goalsOwn - a.goalsOwn
-    ));
-
-  return classificationHomeTable as unknown as IClassification;
+  next();
 }
 
 export default classificationAway;

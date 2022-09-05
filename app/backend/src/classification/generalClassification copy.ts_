@@ -1,11 +1,13 @@
 /* eslint-disable sonarjs/cognitive-complexity */
 /* eslint-disable max-lines-per-function */
 
+import { Request, Response, NextFunction } from 'express';
+
 import { IClassification, IMatchesWithsForeach } from '../interfaces';
 import Classification from '../database/models/classification';
 import matchesServiceSearched from '../service/matchesServiceSearched';
 
-async function generalClassification():
+async function generalClassification(_req: Request, _res: Response, next: NextFunction):
 Promise<void> {
   const allMatches: IMatchesWithsForeach = await matchesServiceSearched(false);
   const teamClassification: IClassification[] = (await Classification.findAll());
@@ -77,6 +79,7 @@ Promise<void> {
       { where: { id: team.id } },
     ) as unknown as IClassification;
   });
+  next();
 }
 
 export default generalClassification;

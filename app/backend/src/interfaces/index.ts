@@ -63,7 +63,7 @@ export interface IMatchesWithsForeach extends IMatches {
 
 export interface IClassification {
   id?: number;
-  name: string,
+  name?: string,
   totalPoints: number,
   totalGames: number,
   totalVictories: number,

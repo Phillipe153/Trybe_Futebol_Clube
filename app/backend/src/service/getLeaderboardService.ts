@@ -1,10 +1,9 @@
-// import { ITeam } from '../interfaces';
-// import Team from '../database/models/teams';
 import { IClassification } from '../interfaces';
 import Classification from '../database/models/classification';
-// import classification from '../utils/classification';
+import generalClassification from '../classification/generalClassification';
 
 export default async function getLeaderboardService():Promise<IClassification[]> {
+  generalClassification();
   // await classification();
   const leaderboard = await Classification.findAll({ order: [
     ['totalPoints', 'DESC'],

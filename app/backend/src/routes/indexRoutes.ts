@@ -11,9 +11,8 @@ import updatedMatchController from '../controller/updateMatchController';
 import ValidateTeamsMidlleware from '../middlewares/validateTeams';
 import updatedMatchInProgressController from '../controller/updateMatchInProgress';
 import getLeaderboardController from '../controller/getLearderboardController';
-import classificationHome from '../classification/classificationHome';
-import classificationAway from '../classification/classificationAway';
-import generalClassification from '../classification/generalClassification';
+import getLeaderboardHomeController from '../controller/getLearderboardHomeController';
+import getLeaderboardAwayController from '../controller/getLearderboardAwayController';
 
 const router = Router();
 
@@ -29,8 +28,8 @@ router.get('/matches/search', matchesControllerSearch);
 router.get('/matches', matchesController);
 router.post('/matches', ValidateTeamsMidlleware, newMatchController);
 
-router.get('/leaderboard/home', classificationHome, getLeaderboardController);
-router.get('/leaderboard/away', classificationAway, getLeaderboardController);
-router.get('/leaderboard', generalClassification, getLeaderboardController);
+router.get('/leaderboard/home', getLeaderboardHomeController);
+router.get('/leaderboard/away', getLeaderboardAwayController);
+router.get('/leaderboard', getLeaderboardController);
 
 export default router;
