@@ -2,14 +2,15 @@
 
 // import { Request, Response, NextFunction } from 'express';
 
-import { IClassification, IMatchesWithsForeach } from '../interfaces';
+import { IClassification, IMatchesWithsForeach, ITeam } from '../interfaces';
 import matchesServiceSearched from '../service/matchesServiceSearched';
 import ClassificationAway from '../database/models/classificationAway';
+import Team from '../database/models/teams';
 
 async function classificationAway():
 Promise<IClassification> {
   const allMatches: IMatchesWithsForeach = await matchesServiceSearched(false);
-  const teamClassification: IClassification[] = (await ClassificationAway.findAll());
+  const teamClassification: ITeam[] = (await Team.findAll());
 
   const classificationHomeTable: IClassification[] = [];
 
@@ -49,7 +50,7 @@ Promise<IClassification> {
 
     classificationHomeTable.push({
       id: team.id as number,
-      name: team.name as string,
+      name: team.teamName as string,
       totalPoints: pontos,
       totalGames: jogos,
       totalVictories: vitorias,

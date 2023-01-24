@@ -1,13 +1,13 @@
 /* eslint-disable max-lines-per-function */
 
-import { IClassification, IMatchesWithsForeach } from '../interfaces';
+import { IClassification, IMatchesWithsForeach, ITeam } from '../interfaces';
 import matchesServiceSearched from '../service/matchesServiceSearched';
-import ClassificationHome from '../database/models/classificationHome';
+import Team from '../database/models/teams';
 
 async function classificationHome():
 Promise<IClassification> {
   const allMatches: IMatchesWithsForeach = await matchesServiceSearched(false);
-  const teamClassification: IClassification[] = (await ClassificationHome.findAll());
+  const teamClassification: ITeam[] = (await Team.findAll());
 
   const classificationHomeTable: IClassification[] = [];
 
@@ -47,7 +47,7 @@ Promise<IClassification> {
 
     classificationHomeTable.push({
       id: team.id as number,
-      name: team.name as string,
+      name: team.teamName as string,
       totalPoints: pontos,
       totalGames: jogos,
       totalVictories: vitorias,
